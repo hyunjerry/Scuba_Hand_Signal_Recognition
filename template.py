@@ -24,7 +24,7 @@ def extract_template(img_path):
 
 for sign in ['bubbles', 'decompress', 'up', 'down', 'hold', 'ok']:
     for i in range(1,6):
-        template_file = f'{img_path}/{sign}{i}.jpg'
+        template_file = f'{img_path}/{sign}-{i}.jpg'
         hand_template = extract_template(template_file)
         h, w = hand_template.shape
         new_dim = (h//3, w//3)

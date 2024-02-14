@@ -50,6 +50,7 @@ class ImageHandler:
 
     # Resize the image
     def resize_img(self, img, size):
+        print(img.shape)
         size = [size[1], size[0], size[2]]
         mask = np.zeros(size, dtype=np.uint8)
         h, w = img.shape[0:2]
@@ -63,6 +64,7 @@ class ImageHandler:
         else:
             dxy = int((size[0] - img.shape[0]) / 2)
             mask[dxy:img.shape[0] + dxy, :, :] = img
+        print(mask.shape)
         return mask
 
     # Create the binary image
@@ -172,7 +174,9 @@ class ImageHandler:
     # Entrance
     def get_hand(self, img):
         self.img = img
+        print("test", img.shape)
         if self.img.shape[0] != 480 and self.img.shape[1] != 640:
+            print(self.img.shape)
             self.img = self.resize_img(img, [640, 480, 3])
         self.src_img = np.copy(self.img)
         self.output_img = np.copy(self.img)
