@@ -295,7 +295,7 @@ class GUI:
         self.img2_label['image'] = img_tk
 
     def run(self):
-        messagebox.showinfo('Notice', message='Adjust the distance threshold for better performance.')
+        # messagebox.showinfo('Notice', message='Adjust the distance threshold for better performance.')
         self.root.mainloop()
 
     def close(self):
