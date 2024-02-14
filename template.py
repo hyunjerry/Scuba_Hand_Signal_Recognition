@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 import os
 
-img_path = 'data'
-template_path = 'templates'
+img_path = r'.\data'
+template_path = r'.\templates'
 
 def extract_template(img_path):
     img = cv2.imread(img_path)
@@ -24,7 +24,7 @@ def extract_template(img_path):
 
 for sign in ['bubbles', 'decompress', 'up', 'down', 'hold', 'ok']:
     for i in range(1,6):
-        template_file = f'{img_path}/{sign}{i}.jpg'
+        template_file = f'{img_path}\{sign}-{i}.jpg'
         hand_template = extract_template(template_file)
         h, w = hand_template.shape
         new_dim = (h//3, w//3)
@@ -34,11 +34,11 @@ for sign in ['bubbles', 'decompress', 'up', 'down', 'hold', 'ok']:
 
 # resize the template to a smaller dimension
 for filename in os.listdir(template_path):        
-    img = cv2.imread(rf'{template_path}/{filename}')
+    img = cv2.imread(rf'{template_path}\{filename}')
     h, w, _ = img.shape
     new_dim = (h//3, w//3)
     new_img = cv2.resize(img, new_dim)
-    cv2.imwrite(rf'{template_path}/{filename}', new_img)
+    cv2.imwrite(rf'{template_path}\{filename}', new_img)
 
 # img = cv2.imread(os.path.join(img_path, ok_img), cv2.IMREAD_COLOR)
 # cv2.imshow("image", img)

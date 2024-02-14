@@ -118,6 +118,7 @@ class ImageHandler:
     
     def detect_by_circularity(self):
         gesture = ''
+        circularity = 0
         contours, _ = cv2.findContours(self.img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         for contour in contours:
             area = cv2.contourArea(contour)
@@ -126,6 +127,16 @@ class ImageHandler:
                 circularity = self.calculate_circularity(contour)
                 gesture = round(circularity, 2)
                 # print(circularity)
+        
+        if circularity >= 0.41:
+            gesture = ['hold']
+        elif circularity < 0.41 and circularity >= 0.31:
+            gesture = ['bubbles']
+        elif circularity < 0.31 and circularity >= 0.22:
+            gesture = ['down'] 
+        elif circularity < 0.22:
+            gesture = ['decompress', 'ok', 'up']
+        # cv2.putText(self.output_img, str(gesture), (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
 
         return gesture
 
@@ -162,15 +173,14 @@ class ImageHandler:
                         r = random.randint(0, 255)
                         cv2.line(self.output_img,self.points_list[max_index[1], :], point, [b, g, r], 4, 16)
                     num += 1
-
-        return
+        return num
 
     def detect(self):
         circularity = self.detect_by_circularity()
         template = self.detect_by_template()
         finger = self.detect_by_finger()
 
-        return template
+        return (circularity, template, finger)
  
     # Entrance
     def get_hand(self, img):
@@ -184,15 +194,19 @@ class ImageHandler:
         self.preprocess_with_HSV()
 
         self.img = self.process()
-        gesture = self.detect()
+        (circularity, template, finger) = self.detect()
 
-        # cv2.putText(self.output_img, gesture, [10, 50], cv2.FONT_HERSHEY_SIMPLEX, 2, [0, 0, 255], thickness=4)
+        gesture = str((circularity, template, finger))
+        cv2.putText(self.output_img, gesture, [10, 50], cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 0, 255], thickness=2)
+
+        gesture = (circularity, template, finger)
         return self.output_img, self.img, gesture
+
     
 
 class GUI:
     def __init__(self):
-        self.image_handler = ImageHandler(20000, 1000, 280)
+        self.image_handler = ImageHandler(20000, 1000, 100)
         self.result_text = ''
         self.video = ''
         self.after = ''
@@ -220,14 +234,14 @@ class GUI:
         self.open_camera_button.place(x=20, y=160, width=250, height=50)
 
         self.result_var = tk.StringVar(self.root, value='')
-        self.result_entry = tk.Entry(self.root, textvariable=self.result_var, state='readonly', font=('Arial', 38), bg='white', bd=10)
+        self.result_entry = tk.Entry(self.root, textvariable=self.result_var, state='readonly', font=('Arial', 20), bg='white', bd=10)
         self.result_entry.place(x=340, y=520, width=640, height=140)
 
         # self.distance_threshold_var = tk.IntVar(self.root)
         # self.distance_scale = tk.Scale(self.root, label='Distance Threshold', from_=0, to=800, 
         #                                resolution=1, orient=tk.HORIZONTAL, tickinterval=200, variable=self.distance_threshold_var, bg='white', bd=10)
         # self.distance_scale.place(x=20, y=620, width=250)
-        # self.update_result()
+        self.update_result()
 
     def toggle_camera(self):
         if self.video:
@@ -272,11 +286,11 @@ class GUI:
         if num == 3:
             messagebox.showerror(title='Warning', message='Please select a video or image file.')      
 
-    # def update_result(self):
-    #     distance = self.distance_threshold_var.get()
-    #     self.image_handler.change_distance(distance)
-    #     self.result_var.set(f'Our signal prediction: {self.result_text}')
-    #     self.root.after(10, self.update_result)
+    def update_result(self):
+        # distance = self.distance_threshold_var.get()
+        # self.image_handler.change_distance(distance)
+        self.result_var.set(f'{self.result_text}')
+        self.root.after(10, self.update_result)
 
     def display_image1(self, img):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGBA)
