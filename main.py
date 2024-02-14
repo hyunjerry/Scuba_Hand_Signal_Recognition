@@ -8,6 +8,7 @@ import os
 
 img_path = 'data'
 template_path = 'templates'
+template_path = 'old_templates'
 # for filename in os.listdir(template_path):        
 #     print(filename)
 
@@ -50,7 +51,7 @@ class ImageHandler:
 
     # Resize the image
     def resize_img(self, img, size):
-        size = [size[1], size[0], size[2]]
+        size = [size[1], size[0], size[2]]  # [h, w, c]
         mask = np.zeros(size, dtype=np.uint8)
         h, w = img.shape[0:2]
     
@@ -63,6 +64,8 @@ class ImageHandler:
         else:
             dxy = int((size[0] - img.shape[0]) / 2)
             mask[dxy:img.shape[0] + dxy, :, :] = img
+        
+        # print(mask.shape)
         return mask
 
     # Create the binary image
@@ -171,9 +174,9 @@ class ImageHandler:
  
     # Entrance
     def get_hand(self, img):
-        self.img = img
-        if self.img.shape[0] != 480 and self.img.shape[1] != 640:
-            self.img = self.resize_img(img, [640, 480, 3])
+        self.img = img  # [h, w, c]
+        if self.img.shape[0] != 480 and self.img.shape[1] != 480:
+            self.img = self.resize_img(img, [480, 480, 3])
         self.src_img = np.copy(self.img)
         self.output_img = np.copy(self.img)
 
