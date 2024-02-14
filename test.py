@@ -25,14 +25,9 @@ class ImageTester:
                 img_path = os.path.join(self.test_folder, file_name)
                 img = self.read_image(img_path) 
 
-                _, _, overall_pred = self.image_handler.get_hand(img)
-                circularity = overall_pred[0]
-                template = overall_pred[1]
-                finger = overall_pred[2]
+                _, _, pred = self.image_handler.get_hand(img)
 
-                predicted_gesture = template
-                predicted_label_idx = self.label_map[predicted_gesture]
-                print(file_name, finger, circularity, template)
+                predicted_label_idx = self.label_map[pred]
                 self.predictions.append(predicted_label_idx)
                 self.true_labels.append(true_label_idx)
 
@@ -56,7 +51,7 @@ class ImageTester:
         plt.xlabel('Predicted')
         plt.ylabel('True')
         plt.title('Confusion Matrix')
-        plt.savefig("result.png")
+        plt.savefig("result222.png")
 
         # print(self.circularity)
         # plt.show()

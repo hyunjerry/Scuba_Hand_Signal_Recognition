@@ -8,7 +8,6 @@ import os
 
 img_path = 'data'
 template_path = 'templates'
-template_path = 'old_templates'
 # for filename in os.listdir(template_path):        
 #     print(filename)
 
@@ -196,10 +195,11 @@ class ImageHandler:
         self.img = self.process()
         (circularity, template, finger) = self.detect()
 
-        gesture = str((circularity, template, finger))
+        # gesture = str((circularity, template, finger))
+        gesture = template
         cv2.putText(self.output_img, gesture, [10, 50], cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 0, 255], thickness=2)
 
-        gesture = (circularity, template, finger)
+        # gesture = (circularity, template, finger)
         return self.output_img, self.img, gesture
 
     
