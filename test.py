@@ -18,7 +18,7 @@ class ImageTester:
     def load_and_predict(self):
         for file_name in os.listdir(self.test_folder):
             if file_name.endswith(('.jpg', '.png')):
-                true_label = file_name.split('.')[0][:-1]  # Assuming format "label+number.jpg/.png"
+                true_label = file_name.split('_')[0]  # Assuming format "label_number.jpg/.png"
                 true_label_idx = self.label_map[true_label]
 
                 img_path = os.path.join(self.test_folder, file_name)
@@ -54,7 +54,7 @@ class ImageTester:
         # plt.show()
 
 image_handler = ImageHandler(5000, 300, 280)
-tester = ImageTester(test_folder='test', image_handler=image_handler)
+tester = ImageTester(test_folder='data', image_handler=image_handler)
 tester.load_and_predict()
 accuracy, f1, cm = tester.evaluate()
 print(f"Accuracy:\n {accuracy}")
