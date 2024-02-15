@@ -15,7 +15,6 @@ def extract_template(img_path):
     img = cv2.inRange(img, low_HSV, high_HSV)
 
     _, binary_image = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-   
     contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     max_contour = max(contours, key=cv2.contourArea)
     x, y, w, h = cv2.boundingRect(max_contour)
@@ -36,7 +35,10 @@ for sign in ['bubbles', 'decompress', 'up', 'down', 'hold', 'ok']:
 for filename in os.listdir(template_path):        
     img = cv2.imread(rf'{template_path}\{filename}')
     h, w, _ = img.shape
-    new_dim = (h//3, w//3)
+    
+    new_dim = (h//2, w//2)
+    # new_dim = (h//3, w//3)
+
     new_img = cv2.resize(img, new_dim)
     cv2.imwrite(rf'{template_path}\{filename}', new_img)
 

@@ -127,14 +127,13 @@ class ImageHandler:
                 gesture = round(circularity, 2)
                 # print(circularity)
         
-        if circularity >= 0.41:
+        if circularity >= 0.43:
             gesture = ['hold']
-        elif circularity < 0.41 and circularity >= 0.31:
+        elif circularity < 0.43 and circularity >= 0.31:
             gesture = ['bubbles']
-        elif circularity < 0.31 and circularity >= 0.22:
-            gesture = ['down'] 
-        elif circularity < 0.22:
-            gesture = ['decompress', 'ok', 'up']
+        elif circularity < 0.31:
+            gesture = ['down', 'decompress', 'ok', 'up'] 
+  
         # cv2.putText(self.output_img, str(gesture), (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
 
         return gesture
@@ -148,6 +147,7 @@ class ImageHandler:
             # print(self.img.shape)
             # print(template.shape)
             result = cv2.matchTemplate(self.img, template, cv2.TM_CCOEFF_NORMED)
+
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
             
             predicted_handshape[ind//5] += max_val
