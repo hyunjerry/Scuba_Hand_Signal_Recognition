@@ -51,7 +51,7 @@ class ImageTester:
         plt.xlabel('Predicted')
         plt.ylabel('True')
         plt.title('Confusion Matrix')
-        plt.savefig("result222.png")
+        plt.savefig("result.png")
 
         # print(self.circularity)
         # plt.show()
