@@ -129,9 +129,10 @@ class ImageHandler:
         
         if circularity >= 0.43:
             gesture = ['hold']
-        elif circularity < 0.43 and circularity >= 0.31:
-            gesture = ['bubbles']
-        elif circularity < 0.31:
+        # elif circularity < 0.43 and circularity >= 0.31:
+        #     gesture = ['bubbles']
+        # elif circularity < 0.31:
+        else:
             gesture = ['down', 'decompress', 'ok', 'up'] 
   
         # cv2.putText(self.output_img, str(gesture), (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 4)
@@ -196,10 +197,19 @@ class ImageHandler:
         (circularity, template, finger) = self.detect()
 
         # gesture = str((circularity, template, finger))
-        gesture = template
+
+        # ensemble
+        if len(circularity)==1:
+            gesture = circularity[0]
+        else:   
+            gesture = template
+
+        # template
+        # gesture = template
+
+
         cv2.putText(self.output_img, gesture, [10, 50], cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 0, 255], thickness=2)
 
-        # gesture = (circularity, template, finger)
         return self.output_img, self.img, gesture
 
     
