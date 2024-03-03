@@ -196,20 +196,18 @@ class ImageHandler:
         self.img = self.process()
         (circularity, template, finger) = self.detect()
 
-        # gesture = str((circularity, template, finger))
+        # print(str((circularity, template, finger)))
 
-        # ensemble
-        if len(circularity)==1:
-            gesture = circularity[0]
-        else:   
-            gesture = template
+        ## model ensemble
+        # if len(circularity)==1:
+        #     gesture = circularity[0]
+        # else:   
+        #     gesture = template
 
-        # template
-        # gesture = template
-
-
+        # model template matching
+        gesture = template
         cv2.putText(self.output_img, gesture, [10, 50], cv2.FONT_HERSHEY_SIMPLEX, 1, [0, 0, 255], thickness=2)
-
+    
         return self.output_img, self.img, gesture
 
     

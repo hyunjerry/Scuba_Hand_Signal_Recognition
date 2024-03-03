@@ -19,7 +19,7 @@ class ImageTester:
     def load_and_predict(self):
         for file_name in os.listdir(self.test_folder):
             if file_name.endswith(('.jpg', '.png')):
-                true_label = file_name.split('-')[0]  # Assuming format "label_number.jpg/.png"
+                true_label = file_name.split('-')[0]  # Assuming format "label-number.jpg/.png"
                 true_label_idx = self.label_map[true_label]
 
                 img_path = os.path.join(self.test_folder, file_name)
